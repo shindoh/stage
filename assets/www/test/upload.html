@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>File Transfer Example</title>
+    
+    <script type="text/javascript" charset="utf-8" src="../libs/jquery-1.7.1.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../libs/cordova-1.8.1.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../app/common/ajax.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../app/common/md5.js"></script>
+    
+    
+    <script type="text/javascript" charset="utf-8">
+
+        // Wait for PhoneGap to load
+        //
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // PhoneGap is ready
+        //
+        function onDeviceReady() {
+
+            // Retrieve image file location from specified source
+            
+             navigator.camera.getPicture(function(message){
+          								  	 FI.imageURI = message;
+          								  	 $("h1").text(FI.imageURI);
+             							},
+                                        function(message) {
+            	 							FI.imageURI = "";
+                                			FI.photoURL = "";
+                                			FI.frob = "";
+                                		},
+                                        { quality: 50, 
+                                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY }
+                                        ); 
+            
+            
+            $("p").bind("click",function(){
+            	if(FI.imageURI)
+            	{
+                	$.ajaxUploadPhotoToFlickr(FI.imageURI);            		
+            	}
+            });
+            
+            $(document).bind("flickrUploadFinish",function(){
+            	$("img").attr('src',FI.photoURL);
+            });
+            
+        }
+        
+        
+        </script>
+</head>
+<body>
+    <h1>Example</h1>
+    <p>Upload File</p>
+    <img></img>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PhoneGap Ajax Sample</title>
+		<script type="text/javascript" charset="utf-8" src="../libs/cordova-1.8.1.js"></script>
+        <script type="text/javascript">
+	        function appReady(){
+				var ajax = new XMLHttpRequest();
+				ajax.open("GET","http://imagesearch.naver.com/instant/search.naver?section=image&rev=15&sort=0&res_fr=0&res_to=0&face=0&color=0&ccl=0&viewtype=0&aq=0&spq=3&nx_search_query=%EC%95%84%EC%9D%B4%EC%9C%A0&nx_and_query=&nx_sub_query=&nx_search_hlquery=&nx_search_fasquery=&ac=0&json=1&json_type=3&m=0&ie=utf8&query=%EC%95%84%EC%9D%B4%EC%9C%A0&display=40&start=50",true);
+				ajax.send();
+	
+				ajax.onreadystatechange=function(){
+					if(ajax.readyState==4 && (ajax.status==200||ajax.status==0)){
+						res = ajax.responseText;
+						eval('var data = ' + ajax.responseText + ';');
+						theResults = data.result.items.item;
+						
+						var theHTML = '';
+						for(var i=0;i<theResults.length;i++){
+							theHTML += ['<div class="tweet"',
+											'<div class="avatar"> <img src='+theResults[i].orgPath+' /></div>',
+											'<div class="tweet_content">',
+												'<h2>'+theResults[i].title+'</h2>',
+												'<p>'+theResults[i].link+'</p>',
+											'</div>',
+										'</div>'].join('');
+						}
+						document.getElementById('main').innerHTML = theHTML;
+					}
+				}
+				
+			}
+			window.onload = appReady;
+        </script>
+
+		<style type="text/css">
+			.tweet {padding-bottom:5px;}
+			.avatar {float: left; height: 48px; width: 48px;}
+			.tweet_content {margin-left: 60px; min-height: 48px;}
+		</style>
+    </head>
+	<body>
+		<div id="main">
+
+		</div>
+	</body>
+</html>
