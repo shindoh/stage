@@ -38,8 +38,8 @@ $.stage.component.listview = function(eleId,tmpId,url,params,func,options)
 		var params={};				
 	}
 	params.listIndex = listIndex;
-	params.listCount = listCount;
-	
+	params.listCount = listCount; ///난 이부분 위의 if 안에만 들어가면 
+								////param이 null이 아닐때는 object 처리만 해서 넣어주면 될것 같애.
 	$.stageAjax.getJson(url,params,function(result){
 		var listData = result.list;
 		var list = $('#'+eleId);
@@ -72,6 +72,68 @@ $.stage.component.listview = function(eleId,tmpId,url,params,func,options)
 		});		
 	}
 
+}
+
+/*
+*
+*
+* @infoview
+* 
+* @parameters
+* 	   eleId : infoview element id
+*     tmpId : script element id
+*       url : target url (get method type)
+*    params : get parameters (json type)
+*      func : callback function
+*   options : (json type, can be omitted)
+*              -listIndex (default 0)
+*              -listCount (default 25)
+*              -autoLoad  (default true)
+*             
+*/
+
+$.stage.component.infoview = function(eleId,tmpId,url,params,func)
+{
+	var ID = params;
+	$.mobile.showPageLoadingMsg("b", "loading...", true);
+	
+	///////
+	//var params={};	
+	//params.userId = ID;
+	//parameter에서 ID 객체 생성 구문
+
+	$.stageAjax.getJson(url,params,function(result){
+		var infoData = result.data;
+		var info = $('#'+eleId);
+		$('#'+tmpId).tmpl(infoData).appendTo(info);
+		info.listview("refresh"); //리스트뷰를 위한 구문
+		func();
+		$.mobile.hidePageLoadingMsg();
+
+	},true);
+	
+}
+
+$.stage.component.infosend = function(eleId,tmpId,url,params,func)
+{
+	var ID = params;
+	$.mobile.showPageLoadingMsg("b", "loading...", true);
+	
+	///////
+	//var params={};	
+	//params.userId = ID;
+	//parameter에서 ID 객체 생성 구문
+
+	$.stageAjax.postJson(url,params,function(result){
+		var infoData = result.data;
+		var info = $('#'+eleId);
+		$('#'+tmpId).tmpl(infoData).appendTo(info);
+		info.listview("refresh"); //리스트뷰를 위한 구문
+		func();
+		$.mobile.hidePageLoadingMsg();
+
+	},true);
+	
 }
 
 
