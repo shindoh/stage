@@ -30,7 +30,7 @@ RestPool = function(){
 		this.POST_TALK = this.STAGE_REST+"/talk";
 		
 		
-		/*
+		/*   
 		 * method : post
 		 * params : userId (required) 
 		 * 			talkIdx (required)		 * 
