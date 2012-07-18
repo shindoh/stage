@@ -101,6 +101,7 @@
 		this.imageURI = "";	
 	    this.frob="";
 	    this.photoUrl="";
+	    this.thumnail="";
 	};
 	
 	var FI = new FlickrInstance();
