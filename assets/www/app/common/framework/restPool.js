@@ -35,7 +35,7 @@ RestPool = function(){
 		 * params : userId (required) 
 		 * 			talkIdx (required)		 * 
 		 * 			comment (required)
-		 * 			imgUrl (required) default = ""
+		 * 			imgUrl (required) default = "" 
 		 */		
 		this.POST_SUB_TALK = this.STAGE_REST+"/talkSub";		
 
