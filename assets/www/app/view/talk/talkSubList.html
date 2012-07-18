@@ -8,18 +8,16 @@
 		</div>
 	</li>
 	</script>
-
 	<script type="text/javascript">
-		$("#talkSubListPage").on("pagecreate", function(){
+		$("#talkSubListPage").on("pageshow", function(){
 			var pageParams = $.stageComponent.pageParam();
 			$.stageComponent.listview("talkSubList","talkItemTpl2",$.stageRestPool.GET_TALK_SUB_LIST+pageParams.talkIdx,null,function(){});
-		});		
+		});			
 	</script>
-	
     <header data-role="header" data-theme="a" data-position="fixed" data-id="foo">
         <h1>톡 보기</h1>
-            <a href="#" data-rel="back" data-icon="grid" data-theme="b">뒤로</a>
-		</div>
+            <a href="talkSubList.html"  data-icon="grid" data-theme="b">뒤로</a>
+			       	<a href="talkWrite.html" data-icon="grid" data-theme="b">톡 쓰기</a>
     </header>
 
     <section data-role="content">

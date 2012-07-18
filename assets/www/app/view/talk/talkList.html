@@ -15,7 +15,7 @@
 			$.stageComponent.listview("talkList","talkItemTpl",$.stageRestPool.GET_TALK_LIST,null,function(){
 				$("#talkList >li").bind("tap",function(){
 					var talkIdx =$(this).attr("data-messageId");
-					$.stage.component.pageMove("talkSubList.html",{talkIdx:talkIdx});		
+					$.stage.component.pageMove("talkSubList.html",{talkIdx:talkIdx},{});		
 				});
 			});
 		});		
@@ -23,7 +23,7 @@
      
     <header data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>스테이지 톡</h1>
-       	<a href="#talkWrite" data-icon="grid" data-theme="b">톡 쓰기</a>
+       	<a href="talkWrite.html" data-icon="grid" data-theme="b">톡 쓰기</a>
     </header>
 
     <section data-role="content">
@@ -42,24 +42,3 @@
     </footer>
 </div>
 
-<div data-role="page" id="talkWrite">
-    <header data-role="header" data-position="fixed" data-tap-toggle="false">
-        <h1>톡쓰기</h1>
-    </header>
-
-    <section data-role="content">
-		<ul data-role="listview" id="talkList">
-		</ul>
-    </section>
-
-    <footer data-role="footer" data-theme="a" data-position="fixed" data-tap-toggle="false">
-		<div data-role="navbar">
-			<a href="talkList.html" data-role="button" data-icon="myapp-email" data-iconpos="top" id="mainTalkButton">톡톡</a>
-			<a href="clubList.html" data-role="button" id="mainClubButton">스테이지</a>
-			<a href="lounge.html" data-role="button" id="mainLoungeButton">라운지</a>
-			<a href="blog.html" data-role="button" id="mainBlogButton">블로그</a>	
-			<a href="setting.html" data-role="button" id="mainSettingButton">세팅</a>	
-		</div>		
-    </footer>
-
-</div>

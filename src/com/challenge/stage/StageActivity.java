@@ -16,6 +16,9 @@ public class StageActivity extends DroidGap {
         super.appView.setVerticalScrollBarEnabled(true);
         super.appView.setHorizontalScrollBarEnabled(false);
    
-        super.appView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);    
+        super.appView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        
     }
+    
+    
 }
