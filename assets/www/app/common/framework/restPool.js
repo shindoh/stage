@@ -33,11 +33,11 @@ RestPool = function(){
 		/*
 		 * method : post
 		 * params : userId (required) 
+		 * 			talkIdx (required)		 * 
 		 * 			comment (required)
 		 * 			imgUrl (required) default = ""
-		 * 			type (required) default = 1
 		 */		
-		this.POST_TALK = this.STAGE_REST+"/talkSub";		
+		this.POST_SUB_TALK = this.STAGE_REST+"/talkSub";		
 
 	
 	/*
