@@ -1,68 +1,80 @@
-public class MainActivity extends Activity {
-
-	private Button startBtn;
-	private Button stopBtn;
-	private Button conditonOpenBtn;
+public class NotifyService extends Service{
+	private final int NOTI_ID=1;
+	private ConditionVariable condValue;
+	private NotificationManager nm;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+	public void onCreate() {
+		Log.e("onCreate","check");
+		nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		
-		startBtn = (Button)findViewById(R.id.notifycationStart);
-		stopBtn = (Button)findViewById(R.id.notifycationStop);
-		conditonOpenBtn = (Button)findViewById(R.id.conditionOpen);
-		
-		startBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				startService(new Intent(getApplicationContext(),NotifyService.class));
-				
-			}
-		});
-		
-		stopBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				stopService(new Intent(getApplicationContext(),NotifyService.class));
-				
-			}
-		});
-		
-		conditonOpenBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				bindService(new Intent(getApplicationContext(),NotifyService.class), conn, 0);
-				
-			}
-		});
-		
-		
+		condValue = new ConditionVariable(false);
+		Thread thread= new Thread(null, run, "notify");
+		thread.start();
+		super.onCreate();
 	}
-
-	ServiceConnection conn= new ServiceConnection() {
+	
+	
+	
+	Runnable run = new Runnable() {
 		
 		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			// TODO Auto-generated method stub
+		public void run() {
+			for(int i = 0 ; i < 4 ; i++)
+			{
+				showNotification("테스트 1");
+				Log.e(i+"번째 ","테스트1");
+				if(condValue.block(3*1000))		//pause
+					break;
+				showNotification("테스트 2");
+				Log.e(i+"번째 ","테스트2");
+				if(condValue.block(3*1000))
+					break;
+				showNotification("테스트 3");
+				Log.e(i+"번째 ","테스트3");
+				if(condValue.block(3*1000))
+					break;
+				
+			}
 			
-		}
-		
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			Log.e("onServiceConnected","check");
-		
+			NotifyService.this.stopSelf();
+			
 		}
 	};
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
+	@SuppressLint("NewApi")
+	private void showNotification(String text)
+	{
+		Notification notify = new Notification();
+		notify.icon = R.drawable.ic_launcher;
+		notify.tickerText = text;
+		notify.when = System.currentTimeMillis();
+		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(),MainActivity.class), 0);
+		notify.setLatestEventInfo(getApplicationContext(), "테스트", text, pendingIntent);
+		
+		nm.notify(NOTI_ID, notify);
 	}
-
+	
+	
+	
+	@Override
+	public void onDestroy() {
+		
+		nm.cancel(NOTI_ID);
+		condValue.open();
+		Log.e("onDestroy","check");
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.e("onStartCommand","check");
+		return super.onStartCommand(intent, flags, startId);
+	}
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		condValue.open();
+		return null;
+	}
 }
+
