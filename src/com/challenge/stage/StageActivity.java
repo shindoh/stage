@@ -1,5 +1,5 @@
 public class NotifyService extends Service{
-    private final int NOTI_ID=1;
+	private final int NOTI_ID=1;
 	private ConditionVariable condValue;
 	private NotificationManager nm;
 	
