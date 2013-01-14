@@ -1,80 +1,43 @@
-public class NotifyService extends Service{
-	private final int NOTI_ID=1;
-	private ConditionVariable condValue;
-	private NotificationManager nm;
-	
-	@Override
-	public void onCreate() {
-		Log.e("onCreate","check");
-		nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		
-		condValue = new ConditionVariable(false);
-		Thread thread= new Thread(null, run, "notify");
-		thread.start();
-		super.onCreate();
-	}
-	
-	
-	
-	Runnable run = new Runnable() {
-		
-		@Override
-		public void run() {
-			for(int i = 0 ; i < 4 ; i++)
-			{
-				showNotification("테스트 1");
-				Log.e(i+"번째 ","테스트1");
-				if(condValue.block(3*1000))		//pause
-					break;
-				showNotification("테스트 2");
-				Log.e(i+"번째 ","테스트2");
-				if(condValue.block(3*1000))
-					break;
-				showNotification("테스트 3");
-				Log.e(i+"번째 ","테스트3");
-				if(condValue.block(3*1000))
-					break;
-				
-			}
-			
-			NotifyService.this.stopSelf();
-			
-		}
-	};
-	
 	@SuppressLint("NewApi")
 	private void showNotification(String text)
 	{
-		Notification notify = new Notification();
-		notify.icon = R.drawable.ic_launcher;
-		notify.tickerText = text;
-		notify.when = System.currentTimeMillis();
 		PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(),MainActivity.class), 0);
-		notify.setLatestEventInfo(getApplicationContext(), "테스트", text, pendingIntent);
+		Notification notify = new Notification();
 		
-		nm.notify(NOTI_ID, notify);
-	}
-	
-	
-	
-	@Override
-	public void onDestroy() {
-		
-		nm.cancel(NOTI_ID);
-		condValue.open();
-		Log.e("onDestroy","check");
-	}
-	
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.e("onStartCommand","check");
-		return super.onStartCommand(intent, flags, startId);
-	}
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-		condValue.open();
-		return null;
-	}
-}
+		try {
+			Object notifyBuilder = Class.forName("android.app.Notification.Builder").newInstance();
 
+			Method setTickerMethod = notifyBuilder.getClass().getMethod("setTicker", new Class[]{CharSequence.class});
+			Method setSmallIconMethod = notifyBuilder.getClass().getMethod("setSmallIcon", new Class[]{int.class});
+			Method setLargeIconMethod = notifyBuilder.getClass().getMethod("setLargeIcon", new Class[]{int.class});
+			Method setWhenMethod = notifyBuilder.getClass().getMethod("setWhen", new Class[]{long.class});
+			Method setContentTitleMethod = notifyBuilder.getClass().getMethod("setContentTitle", new Class[]{CharSequence.class});
+			Method setContentTextMethod = notifyBuilder.getClass().getMethod("setContentText", new Class[]{CharSequence.class});
+			Method setContentIntentMethod = notifyBuilder.getClass().getMethod("setContentIntent", new Class[]{PendingIntent.class});
+			
+			
+			setTickerMethod.invoke(notifyBuilder, text);
+			setSmallIconMethod.invoke(notifyBuilder, R.drawable.ic_launcher);
+			setLargeIconMethod.invoke(notifyBuilder, R.drawable.ic_launcher);
+			setWhenMethod.invoke(notifyBuilder, System.currentTimeMillis());			
+			setContentTitleMethod.invoke(notifyBuilder, text);
+			setContentTextMethod.invoke(notifyBuilder, text);
+			setContentIntentMethod.invoke(notifyBuilder, pendingIntent);
+			
+		} catch (Exception e) {
+			
+			notify.icon = R.drawable.ic_launcher;
+			notify.tickerText = text;
+			notify.when = System.currentTimeMillis();
+
+			notify.setLatestEventInfo(getApplicationContext(), "테스트", text, pendingIntent);
+			
+			
+			e.printStackTrace();
+		}
+		
+		startForeground(NOTI_ID, notify);
+		
+//		nm.notify(NOTI_ID, notify);
+	}
+	
